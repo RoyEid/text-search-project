@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Text Search</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f7f7f7;
+            color: #222;
+        }
+
+        .page {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 32px 20px 60px;
+        }
+
+        .hero {
+            margin-bottom: 24px;
+        }
+
+        .hero small {
+            display: block;
+            font-size: 15px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .hero h1 {
+            margin: 0;
+            font-size: 52px;
+            line-height: 1.1;
+        }
+
+        .instructions {
+            background: #eef4f5;
+            padding: 28px;
+            margin: 28px 0 40px;
+            border-radius: 4px;
+        }
+
+        .instructions h2 {
+            margin-top: 0;
+            font-size: 28px;
+        }
+
+        .search-section {
+            background: #eef4f5;
+            padding: 28px;
+            border-radius: 4px;
+        }
+
+        .search-section h2 {
+            margin-top: 0;
+            font-size: 46px;
+            margin-bottom: 24px;
+        }
+
+        .top-row {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 28px;
+            align-items: start;
+        }
+
+        .search-box {
+            position: relative;
+            margin-bottom: 18px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 14px 42px 14px 14px;
+            font-size: 18px;
+            border: 1px solid #d8d8d8;
+            border-radius: 2px;
+            outline: none;
+            background: #fff;
+        }
+
+        .search-box span {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+            font-size: 18px;
+        }
+
+        .count {
+            margin: 0 0 24px;
+            color: #555;
+            font-size: 15px;
+        }
+
+        .results {
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+        }
+
+        .article {
+            background: #fff;
+            padding: 22px;
+            border-radius: 4px;
+            border: 1px solid #e2e2e2;
+        }
+
+        .article h3 {
+            margin: 0 0 8px;
+            font-size: 22px;
+            line-height: 1.35;
+        }
+
+        .meta {
+            font-size: 13px;
+            color: #777;
+            margin-bottom: 12px;
+        }
+
+        .article p {
+            margin: 0;
+            line-height: 1.6;
+            color: #444;
+        }
+
+        .sidebar {
+            background: #fff;
+            border: 1px solid #e2e2e2;
+            padding: 18px;
+            border-radius: 4px;
+        }
+
+        .sidebar h4 {
+            margin: 0 0 8px;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        .sidebar p {
+            margin: 0;
+            line-height: 1.6;
+            color: #555;
+            font-size: 14px;
+        }
+
+        mark {
+            background: #f3c96a;
+            padding: 0 2px;
+            border-radius: 2px;
+        }
+
+        .empty {
+            background: #fff;
+            border: 1px solid #e2e2e2;
+            padding: 18px;
+            border-radius: 4px;
+            color: #666;
+        }
+
+        @media (max-width: 860px) {
+            .top-row {
+                grid-template-columns: 1fr;
+            }
+
+            .hero h1 {
+                font-size: 40px;
+            }
+
+            .search-section h2 {
+                font-size: 36px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page">
+        <section class="hero">
+            <small>Article type: Project</small>
+            <h1>Text Search</h1>
+        </section>
+
+        <section class="instructions">
+            <h2>Project instructions</h2>
+            <p>
+                Your task is to create a search box where users can type in keywords or
+                phrases, and your application returns results with the text being searched
+                for highlighted.
+            </p>
+            <p>
+                No need for a backend to be integrated. Store an array of articles in a
+                constant and make use of it.
+            </p>
+            <p>
+                It should look something like the image below.
+            </p>
+        </section>
+
+        <section class="search-section">
+            <div class="top-row">
+                <div>
+                    <h2>Search</h2>
+
+                    <div class="search-box">
+                        <input id="searchInput" type="text" placeholder="Search articles..." />
+                        <span>⌕</span>
+                    </div>
+
+                    <p class="count" id="resultCount"></p>
+
+                    <div class="results" id="results"></div>
+                </div>
+
+                <aside class="sidebar">
+                    <h4>bitsofcode. Articles on Frontend Development.</h4>
+                    <p>
+                        All articles are written by Ire Aderinokun, Frontend Developer and
+                        User Interface Designer.
+                    </p>
+                </aside>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        const articles = [
+            {
+                title: "Understanding the difference between grid-template and grid-auto",
+                date: "Oct 09, 2018",
+                content:
+                    "With all the new properties related to CSS Grid Layout, one of the distinctions that always confused me was the difference between the grid-template-* and grid-auto-* properties. Specifically the difference between grid-template-rows/columns and grid-auto-rows/columns."
+            },
+            {
+                title: "Recreating the GitHub Contribution Graph with CSS Grid Layout",
+                date: "Oct 06, 2018",
+                content:
+                    "Learn how to recreate the GitHub contribution graph using CSS Grid Layout. This article explores rows, columns, spacing and responsive grid techniques."
+            },
+            {
+                title: "An Introduction to CSS Grid Layout",
+                date: "Sep 18, 2018",
+                content:
+                    "CSS Grid Layout is a two-dimensional layout system for the web. It lets you organize content into rows and columns more easily than older methods."
+            },
+            {
+                title: "Building Responsive Layouts with Modern CSS",
+                date: "Aug 22, 2018",
+                content:
+                    "Modern CSS makes responsive layout creation easier with flexbox, grid, spacing systems and better control over page structure."
+            },
+            {
+                title: "Flexbox vs Grid: When to Use Which",
+                date: "Jul 15, 2018",
+                content:
+                    "Flexbox works well for one-dimensional layouts, while grid is ideal for two-dimensional layout problems involving rows and columns."
+            },
+            {
+                title: "Getting Started with CSS Grid",
+                date: "Jun 10, 2018",
+                content:
+                    "This beginner guide explains CSS Grid concepts including container, items, tracks, gaps and named grid areas."
+            },
+            {
+                title: "Grid Template Areas in Practice",
+                date: "May 08, 2018",
+                content:
+                    "Using grid-template-areas can make layout code easier to read and maintain when building structured page sections."
+            },
+            {
+                title: "Responsive Dashboards with Grid",
+                date: "Apr 19, 2018",
+                content:
+                    "Dashboards often benefit from grid because it handles panels, sidebars and content areas in a predictable layout structure."
+            },
+            {
+                title: "Nested Grid Layout Techniques",
+                date: "Mar 12, 2018",
+                content:
+                    "Nested grids help solve complex layout requirements by placing grid containers inside other grid items."
+            },
+            {
+                title: "Common CSS Grid Mistakes",
+                date: "Feb 27, 2018",
+                content:
+                    "Avoid common grid mistakes like overusing fixed sizes, forgetting responsiveness and mixing grid and flexbox without purpose."
+            }
+        ];
+
+        const searchInput = document.getElementById("searchInput");
+        const resultsEl = document.getElementById("results");
+        const resultCountEl = document.getElementById("resultCount");
+
+        function escapeRegExp(text) {
+            return text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        }
+
+        function highlightText(text, query) {
+            if (!query.trim()) return text;
+            const regex = new RegExp("(" + escapeRegExp(query) + ")", "gi");
+            return text.replace(regex, "<mark>$1</mark>");
+        }
+
+        function filterArticles(query) {
+            const q = query.trim().toLowerCase();
+            if (!q) return [];
+            return articles.filter(article =>
+                article.title.toLowerCase().includes(q) ||
+                article.content.toLowerCase().includes(q)
+            );
+        }
+
+        function renderResults(query) {
+            const trimmed = query.trim();
+
+            if (!trimmed) {
+                resultCountEl.textContent = "Type something to search now.";
+                resultsEl.innerHTML = "";
+                return;
+            }
+
+            const filtered = filterArticles(trimmed);
+            resultCountEl.textContent = `${filtered.length} posts were found.`;
+
+            if (!filtered.length) {
+                resultsEl.innerHTML = `<div class="empty">No articles matched your search.</div>`;
+                return;
+            }
+
+            resultsEl.innerHTML = filtered.map(article => `
+        <article class="article">
+          <h3>${highlightText(article.title, trimmed)}</h3>
+          <div class="meta">${article.date}</div>
+          <p>${highlightText(article.content, trimmed)}</p>
+        </article>
+      `).join("");
+        }
+
+        searchInput.addEventListener("input", e => {
+            renderResults(e.target.value);
+        });
+
+        renderResults("grid");
+        searchInput.value = "grid";
+    </script>
+</body>
+
+</html>
