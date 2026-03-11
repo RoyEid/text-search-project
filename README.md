@@ -1,14 +1,59 @@
 # Text Search Project
 
-A frontend text search app that filters articles and highlights matching text.
-
-## How to run
-
-Open `index.html` in a browser.
+A frontend search application that allows users to search through a list of articles and highlights the matching keywords in the results.
 
 ## Features
 
-- Search articles by keyword or phrase
-- Matching text is highlighted
-- Articles are stored in a constant array
+- Live search filtering
+- Highlight matching keywords
+- Displays number of results found
+- Simple and responsive layout
 - No backend required
+
+## Technologies Used
+
+- HTML
+- CSS
+- JavaScript
+
+## How to Run the Project
+
+1. Clone the repository
+
+```
+git clone https://github.com/RoyEid/text-search-project.git
+```
+
+2. Open the project folder
+
+3. Open the file:
+
+```
+index.html
+```
+
+in your browser.
+
+## Live Demo
+
+You can view the project live here:
+
+```
+https://royeid.github.io/text-search-project/
+```
+
+## Project Structure
+
+```
+text-search-project
+│
+├── index.html
+└── README.md
+```
+
+## Author
+
+Roy Eid
+
+GitHub:
+https://github.com/RoyEid
